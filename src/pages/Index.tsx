@@ -18,7 +18,7 @@ type Tab = 'home' | 'categories' | 'add' | 'settings';
 
 export default function Index() {
   const { entries, search, getByCategory, theme, toggleTheme } = usePasswords();
-  const { user, signOut, deleteAccount } = useAuth();
+  const { user, logout, deleteAccount } = useAuth();
   const [tab, setTab] = useState<Tab>('home');
   const [query, setQuery] = useState('');
   const [editEntry, setEditEntry] = useState<PasswordEntry | null>(null);
@@ -237,7 +237,7 @@ export default function Index() {
                   </div>
                   <button
                     onClick={async () => {
-                      await signOut();
+                      await logout();
                       toast.success('Desconectado');
                     }}
                     className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive transition-colors hover:bg-destructive hover:text-destructive-foreground"
@@ -302,7 +302,14 @@ export default function Index() {
                 </div>
               </div>
 
-              <div className="pt-4 text-center">
+              <div className="pt-8 text-center space-y-4">
+                <Button 
+                  variant="destructive" 
+                  className="w-full mb-4" 
+                  onClick={handleDeleteAccount}
+                >
+                  Excluir Minha Conta Permanente
+                </Button>
                 <p className="text-xs text-muted-foreground">
                   Vault Password Manager v1.0
                 </p>
