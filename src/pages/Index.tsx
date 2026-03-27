@@ -12,12 +12,13 @@ import { categories } from '@/data/presets';
 import { chamarAnaliseGeral, type AnaliseGeral } from '@/services/aiClient';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button'; // Assuming Button component is from shadcn/ui or similar
 
 type Tab = 'home' | 'categories' | 'add' | 'settings';
 
 export default function Index() {
   const { entries, search, getByCategory, theme, toggleTheme } = usePasswords();
-  const { user, signOut } = useAuth();
+  const { user, signOut, deleteAccount } = useAuth();
   const [tab, setTab] = useState<Tab>('home');
   const [query, setQuery] = useState('');
   const [editEntry, setEditEntry] = useState<PasswordEntry | null>(null);
@@ -42,6 +43,23 @@ export default function Index() {
       toast.error('Erro na análise: ' + (err instanceof Error ? err.message : 'Tente novamente.'));
     } finally {
       setLoadingAnalise(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmar = window.confirm(
+      "TEM CERTEZA ABSOLUTA? Isso vai apagar COMPLETAMENTE sua conta e TODAS as suas senhas. Esse processo é IRREVERSÍVEL."
+    );
+    if (!confirmar) return;
+
+    const confirmarDuplo = window.confirm(
+      "Você perderá o acesso para sempre e os dados não poderão ser recuperados nem mesmo pelos administradores. Clique OK para destruir a conta."
+    );
+    if (!confirmarDuplo) return;
+
+    const sucesso = await deleteAccount();
+    if (sucesso) {
+      alert("Sua conta e todos os dados foram apagados permanentemente.");
     }
   };
 
