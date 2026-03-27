@@ -75,9 +75,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await supabase.auth.signOut();
       setUser(null);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao excluir conta:', error);
-      alert('Houve um erro ao tentar excluir sua conta.');
+      alert('Houve um erro ao tentar excluir sua conta: ' + (error.message || JSON.stringify(error)));
       return false;
     }
   };
